@@ -1,0 +1,17 @@
+{
+  "name": "interpreter",
+  "version": "1.0.0",
+  "description": "A simple Node.js CLI tool to save input and read directory contents.",
+  "main": "cli.js",
+  "type": "module",
+  "scripts": {
+    "start": "node cli.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "clipboardy": "^5.3.1",
+    "gtts": "^0.2.1",
+    "say": "^0.16.0"
+  }
+}
