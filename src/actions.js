@@ -12,7 +12,7 @@ export async function saveInput() {
     try {
         const text = await rl.question('T: ');
         await fs.writeFile('captured_input.txt', text, 'utf8');
-        console.log('✅ Guardado');
+        console.log('Guardado');
     } catch (e) {
         console.error(e.message);
     } finally {
@@ -24,8 +24,8 @@ export async function saveInput() {
  * Carga las reglas de exclusión exclusivamente desde .interpreterignore
  */
 async function getIgnoreRules(dirPath) {
-    const ignorePath = path.join(dirPath, '.interpreterignore');
-    console.log(ignorePath);
+    // const ignorePath = path.join(dirPath, '.interpreterignore');
+    const ignorePath = '.interpreterignore';
     try {
         const content = await fs.readFile(ignorePath, 'utf8');
         return content
@@ -51,16 +51,16 @@ export async function readDirectory(dirPath) {
         console.log(ignoreRules);
         console.log(`\n Reading: ${absolutePath}`);
         if (ignoreRules.length > 0) {
-            console.log(`🚫 Custom Ignore Rules active.`);
+            console.log(`Custom Ignore Rules active.`);
         }
         
         let res = await scanDir(absolutePath, "", ignoreRules, absolutePath);
         
         await clipboard.write(res.trim());
-        console.log(`\n✅ Copiado al portapapeles: ${res.length} caracteres.`);
+        console.log(`\n Copiado al portapapeles: ${res.length} caracteres.`);
         
     } catch (e) {
-        console.error('❌ Error:', e.message);
+        console.error(' Error:', e.message);
     }
 }
 
