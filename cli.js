@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { saveInput, readDirectory } from './src/actions.js';
+import { runRpc } from './src/rpc.js';
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -15,7 +16,10 @@ async function main() {
             const targetDir = args[1] || '.';
             await readDirectory(targetDir);
             break;
-            
+        case 'rpc':
+            await runRpc();
+           break;
+    
         default:
             console.log(`
 🚀 Interpreter CLI
