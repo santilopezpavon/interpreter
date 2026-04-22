@@ -4,7 +4,7 @@ A specialized Node.js interface designed to bridge local development environment
 
 ---
 
-## 🚀 Overview
+## Overview
 
 This project streamlines the "Analyze-Promp-Execute" workflow by:
 1. **Flattening** local directories into LLM-ready prompts.
@@ -13,7 +13,7 @@ This project streamlines the "Analyze-Promp-Execute" workflow by:
 
 ---
 
-## 🛠 Features
+## Features
 
 *   **Smart Scanning**: Recursively reads files while respecting `.interpreterignore`.
 *   **Token Efficiency**: Automatic minification of source code before copying to clipboard.
@@ -22,7 +22,7 @@ This project streamlines the "Analyze-Promp-Execute" workflow by:
 
 ---
 
-## 📂 Project Architecture
+## Project Architecture
 
 ### `cli.js`
 The command dispatcher. Handles the following modes:
@@ -42,7 +42,7 @@ The execution layer. It parses JSON-RPC objects from the clipboard and translate
 
 ---
 
-## 📋 Usage Guide
+## Usage Guide
 
 ### 1. Send Code to AI
 Run the analysis command:
@@ -60,7 +60,7 @@ The CLI will automatically apply the changes to your local files.
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Create a `.interpreterignore` file in your root directory to exclude specific paths:
 ```text
@@ -73,7 +73,7 @@ package-lock.json
 
 ---
 
-## ✉️ JSON-RPC Format
+## JSON-RPC Format
 For the `rpc` command to succeed, the AI response must follow this structure:
 
 ```json
