@@ -5,3 +5,4 @@ package.json
 .interpreterignore
 captured_input.txt
 readme.md
+.env
