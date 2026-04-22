@@ -1,24 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import readline from 'node:readline/promises';
-import { stdin as input, stdout as output } from 'node:process';
 import clipboard from 'clipboardy';
 
-/**
- * Solicita entrada al usuario y la guarda en un archivo.
- */
-export async function saveInput() {
-    const rl = readline.createInterface({ input, output });
-    try {
-        const text = await rl.question('T: ');
-        await fs.writeFile('captured_input.txt', text, 'utf8');
-        console.log('Guardado');
-    } catch (e) {
-        console.error(e.message);
-    } finally {
-        rl.close();
-    }
-}
 
 /**
  * Carga las reglas de exclusión exclusivamente desde .interpreterignore
@@ -41,22 +24,21 @@ async function getIgnoreRules(dirPath) {
 /**
  * Lee el directorio, aplica filtros del archivo ignore y copia al portapapeles.
  */
-export async function readDirectory(dirPath) {
+export async function readDirectory(dirPath, preprompt = '') {
     try {
         const absolutePath = path.resolve(dirPath);
         if (!(await fs.stat(absolutePath)).isDirectory()) return;
 
         // Carga reglas dinámicas
         const ignoreRules = await getIgnoreRules(absolutePath);
-        console.log(ignoreRules);
         console.log(`\n Reading: ${absolutePath}`);
         if (ignoreRules.length > 0) {
             console.log(`Custom Ignore Rules active.`);
         }
         
         let res = await scanDir(absolutePath, "", ignoreRules, absolutePath);
-        
-        await clipboard.write(res.trim());
+        res = preprompt + " " + res.trim();
+        await clipboard.write(res);
         console.log(`\n Copiado al portapapeles: ${res.length} caracteres.`);
         
     } catch (e) {

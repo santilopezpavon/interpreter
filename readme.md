@@ -1,4 +1,4 @@
-# 🚀 Interpreter CLI
+# Interpreter CLI
 
 A lightweight **Node.js command‑line tool** for:
 
@@ -12,8 +12,16 @@ Perfect for code inspection, dataset preparation, prompt engineering, or project
 
 # Usage
 
-Create a .interpreterignore with rename .interpreterignore_example for exampe.
+npm start creator:
+    Crea un prompt en el porta papeles, que es para que el Chat devuelva un JSONRPC.
 
-npm start read <path_project>
+npm start rpc:
+    Coge un JSONRPC del copia papeles y ejecuta las acciones
 
-THen the code will be in your clipboard.
+npm start analyze:
+    Genera un prompt con el contenido de código de un directorio para enviar a analizar
+
+npm start analyze-apply:
+    Genera un prompt para solicitar la aplicación de las mejoras del analyze en JSONRPC
+
+

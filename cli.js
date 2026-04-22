@@ -1,42 +1,50 @@
 #!/usr/bin/env node
-
-import { saveInput, readDirectory } from './src/actions.js';
-import { runRpc } from './src/rpc.js';
+import { runRpc, callRPC } from './src/rpc.js';
+import { analyzeDirectory , apllyChanges} from './src/analyzer.js';
 
 const args = process.argv.slice(2);
 const command = args[0];
 
 async function main() {
-    switch (command) {
-        case 'save':
-            await saveInput();
-            break;
-            
-        case 'read':
-            const targetDir = args[1] || '.';
-            await readDirectory(targetDir);
-            break;
-        case 'rpc':
-            await runRpc();
-           break;
-    
-        default:
-            console.log(`
+  switch (command) {
+    case 'rpc':
+      await runRpc();
+      break;
+
+    case 'analyze':
+      await analyzeDirectory();
+      break;
+
+    case 'creator':
+      await callRPC();
+      break;
+
+    case 'analyze-apply':
+      await apllyChanges();
+      break;
+    default:
+      console.log(`
 🚀 Interpreter CLI
 
-Usage:
-  node cli.js save           Interactive prompt to save text to a file.
-  node cli.js read <dir>     Read all files in <dir> and print their content.
+Available commands:
 
-Example:
-  node cli.js save
-  node cli.js read ./src
-            `);
-            break;
-    }
+  npm start creator
+      Creates a prompt in the clipboard for the AI to return a JSON-RPC response.
+
+  npm start rpc
+      Reads a JSON-RPC from the clipboard and executes the actions.
+
+  npm start analyze
+      Generates a prompt with the directory's code content for analysis.
+
+  npm start analyze-apply
+      Generates a prompt to request the application of analysis improvements via JSON-RPC.
+`);
+      break;
+  }
 }
 
 main().catch(err => {
-    console.error('💥 Unexpected error:', err);
-    process.exit(1);
+  console.error('Unexpected error:', err);
+  process.exit(1);
 });

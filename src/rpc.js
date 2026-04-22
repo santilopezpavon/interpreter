@@ -1,6 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import clipboard from 'clipboardy';
+import readline from 'node:readline/promises';
+import { stdin as input, stdout as output } from 'node:process';
 
 export async function runRpc() {
   let request;
@@ -33,29 +35,41 @@ export async function runRpc() {
           await fs.mkdir(dir, { recursive: true });
         }
 
+        const action = method.toLowerCase();
+        let normalizedMethod = "";
+        if (action.includes("read"))   normalizedMethod = "read";
+        else if (action.includes("write"))  normalizedMethod = "write";
+        else if (action.includes("delete")) normalizedMethod = "delete";
+        else if (action.includes("update")) normalizedMethod = "update";
+        else if (action.includes("list"))   normalizedMethod = "list";
+
+
+
         // Dispatcher de métodos
-        switch (method) {
-          case "fs.read":
+        switch (normalizedMethod) {
+          case "read":
             result = await fs.readFile(filePath, "utf8");
             break;
 
-          case "fs.write":
+          case "write":
+          case "update":
             await fs.writeFile(filePath, params.content, "utf8");
             result = true;
             break;
 
-          case "fs.delete":
+          case "delete":
             await fs.unlink(filePath);
             result = true;
             break;
 
-          case "fs.list":
+          case "list":
             result = await fs.readdir(filePath);
             break;
-
+            
           default:
-            throw new Error(`Unknown method: ${method}`);
+            throw new Error(`Método no reconocido: ${method}`);
         }
+
 
         // Respuesta correcta
         responses.push({
@@ -78,9 +92,36 @@ export async function runRpc() {
     const output = isBatch ? responses : responses[0];
 
     await clipboard.write(JSON.stringify(output, null, 2));
-    console.log("✔️ Response copied to clipboard");
+    console.log("Response copied to clipboard");
 
   } catch (err) {
-    console.error("❌ Fatal error:", err.message);
+    console.error("Fatal error:", err.message);
+  }
+}
+
+export async function callRPC() {
+  const rl = readline.createInterface({ input, output });
+
+  try {
+    const dir = await rl.question('Directorio del código: ');
+    const role = await rl.question('Rol del creador (ej: experto en arquitectura): ');
+    let requisitos = await rl.question('Requisitos: ');
+    const peticion = await rl.question('Petición: ');
+    if(requisitos != '') {
+      requisitos = ".Los requisitos son: " + requisitos;
+    } 
+
+    const preprompt =
+      `Como ${role}. ${peticion} ${requisitos} ` +
+      `La respuesta debe ser únicamente JSON-RPC con las acciones a realizar en el sistema de ficheros en el directorio ${dir}.`;
+      `Las acciones posibles son fsWrite, fsDelete`;
+
+    await clipboard.write(preprompt);
+
+    console.log('\n Prompt generado y copiado al portapapeles\n');
+  } catch (e) {
+    console.error('Error:', e.message);
+  } finally {
+    rl.close();
   }
 }
